@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export REVTEST_REPO=/home/dave/temp/git_test
+export REVTEST_MAX_TESTS=30
+
+function prepare_repo {
+	git checkout master
+}
+
+function test {
+	cd $REVTEST_REPO/src
+	g++ prog.cpp > /dev/null 2>&1 || exit $?
+	./a.out > /dev/null 2>&1 || exit $?
+}
+
+# Execute test if called
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+	test
+fi

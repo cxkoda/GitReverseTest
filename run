@@ -1,16 +1,17 @@
 #!/bin/bash
 
 REVTEST_ROOT=$(pwd)
+REVTEST_TEST=$(realpath $1)
 
-export REVTEST_REPO=~/temp/git_test
-REVTEST_TEST=$REVTEST_ROOT/test.sh
-REVTEST_MAX_TESTS=30
+echo "$REVTEST_TEST"
 
+source $REVTEST_TEST
 
 cd $REVTEST_REPO
-#git checkout master
-iTest=0
+prepare_repo
 
+
+iTest=0
 while true; do
 	((iTest++))
 	COMMIT=$(git rev-parse --verify HEAD)
@@ -28,6 +29,7 @@ while true; do
 		break
 	fi
 
+	git stash > /dev/null 2>&1
 	git checkout HEAD~1 > /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
